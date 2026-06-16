@@ -5,7 +5,6 @@
     <title>Plan Financiero de Mejora</title>
 
     <style>
-        /* ------------------ ESTILO GLOBAL ------------------ */
         body {
             margin: 0;
             font-family: "Poppins", sans-serif;
@@ -19,10 +18,8 @@
             text-align: center;
             font-size: 40px;
             font-weight: bold;
-            letter-spacing: 1px;
         }
 
-        /* ------------------ NAV ------------------ */
         nav {
             display: flex;
             justify-content: center;
@@ -47,7 +44,6 @@
             transform: translateY(-3px);
         }
 
-        /* ------------------ ONDAS DECORATIVAS ------------------ */
         .wave {
             position: absolute;
             width: 140%;
@@ -63,7 +59,6 @@
         .w2 { top: 350px; background: rgba(255,255,255,0.10); }
         .w3 { top: 700px; background: rgba(255,255,255,0.18); }
 
-        /* ------------------ PANTALLAS ------------------ */
         .pantalla {
             display: none;
             padding: 50px;
@@ -79,7 +74,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ------------------ TARJETAS ------------------ */
         .card {
             max-width: 750px;
             margin: auto;
@@ -125,6 +119,24 @@
             transform: translateY(-3px);
         }
 
+        table {
+            width: 100%;
+            margin-top: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            color: #333;
+            overflow: hidden;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        table th {
+            background: #eee;
+        }
+
         #historial p {
             background: rgba(255,255,255,0.9);
             padding: 12px;
@@ -140,7 +152,6 @@
 
 <header>✨ Plan Financiero de Mejora</header>
 
-<!-- Ondas decorativas -->
 <div class="wave w1"></div>
 <div class="wave w2"></div>
 <div class="wave w3"></div>
@@ -151,33 +162,30 @@
     <button onclick="mostrar('bitacora')">Bitácora</button>
 </nav>
 
-<!-- ------------------ INICIO ------------------ -->
 <div id="inicio" class="pantalla activa">
     <div class="card">
         <h2>Bienvenido 👋</h2>
         <p>Explora este prototipo moderno inspirado en diseños premium.</p>
-        <p>Incluye un simulador de ahorro y una bitácora emocional financiera.</p>
+        <p>Incluye un simulador de ahorro mensual y una bitácora emocional financiera.</p>
     </div>
 </div>
 
-<!-- ------------------ SIMULADOR ------------------ -->
 <div id="simulador" class="pantalla">
     <div class="card">
-        <h2>Simulador de Ahorro 💰</h2>
+        <h2>Simulador de Ahorro Mensual 💰</h2>
 
-        <label>Cantidad a ahorrar:</label>
-        <input type="number" id="cantidad" placeholder="Ej: 500">
+        <label>Monto total que deseas ahorrar:</label>
+        <input type="number" id="total" placeholder="Ej: 3000">
 
-        <label>Tiempo (meses):</label>
-        <input type="number" id="tiempo" placeholder="Ej: 6">
+        <label>Tiempo en meses:</label>
+        <input type="number" id="meses" placeholder="Ej: 6">
 
-        <button class="btn-accion" onclick="simular()">Mostrar Simulación</button>
+        <button class="btn-accion" onclick="generarPlan()">Generar Plan Mensual</button>
 
-        <p id="resultado" style="font-weight:bold; margin-top:20px;"></p>
+        <div id="resultado"></div>
     </div>
 </div>
 
-<!-- ------------------ BITÁCORA ------------------ -->
 <div id="bitacora" class="pantalla">
     <div class="card">
         <h2>Bitácora Emocional ✍️</h2>
@@ -197,17 +205,31 @@
         document.getElementById(pantalla).classList.add('activa');
     }
 
-    function simular() {
-        let cantidad = document.getElementById("cantidad").value;
-        let tiempo = document.getElementById("tiempo").value;
+    function generarPlan() {
+        let total = document.getElementById("total").value;
+        let meses = document.getElementById("meses").value;
 
-        if (!cantidad || !tiempo) {
-            document.getElementById("resultado").innerText = "Por favor completa ambos campos.";
+        if (!total || !meses) {
+            document.getElementById("resultado").innerHTML = "<p>Completa ambos campos.</p>";
             return;
         }
 
-        document.getElementById("resultado").innerText =
-            `Si ahorras Q${cantidad} durante ${tiempo} meses, podrás visualizar tu progreso financiero.`;
+        let mensual = (total / meses).toFixed(2);
+
+        let tabla = `
+            <h3>Plan de Ahorro Mensual</h3>
+            <p>Debes ahorrar <b>Q${mensual}</b> cada mes.</p>
+            <table>
+                <tr><th>Mes</th><th>Ahorro</th></tr>
+        `;
+
+        for (let i = 1; i <= meses; i++) {
+            tabla += `<tr><td>${i}</td><td>Q${mensual}</td></tr>`;
+        }
+
+        tabla += "</table>";
+
+        document.getElementById("resultado").innerHTML = tabla;
     }
 
     function guardarBitacora() {
