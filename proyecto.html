@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Plan Financiero de Mejora</title>
+
+    <style>
+        /* ------------------ ESTILO GLOBAL ------------------ */
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 30px;
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* ------------------ NAV ------------------ */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 15px;
+        }
+
+        nav button {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.25);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        nav button:hover {
+            background: rgba(255,255,255,0.45);
+            transform: translateY(-3px);
+        }
+
+        /* ------------------ ONDAS DECORATIVAS ------------------ */
+        .wave {
+            position: absolute;
+            width: 140%;
+            height: 300px;
+            left: -20%;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+        }
+
+        .w1 { top: 0; }
+        .w2 { top: 350px; background: rgba(255,255,255,0.10); }
+        .w3 { top: 700px; background: rgba(255,255,255,0.18); }
+
+        /* ------------------ PANTALLAS ------------------ */
+        .pantalla {
+            display: none;
+            padding: 50px;
+            animation: fade 0.4s ease-in-out;
+        }
+
+        .activa {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ------------------ TARJETAS ------------------ */
+        .card {
+            max-width: 750px;
+            margin: auto;
+            padding: 40px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            background: rgba(255,255,255,0.85);
+            color: #333;
+        }
+
+        .btn-accion {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: #ff4f9a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+        }
+
+        .btn-accion:hover {
+            background: #ff2d85;
+            transform: translateY(-3px);
+        }
+
+        #historial p {
+            background: rgba(255,255,255,0.9);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 10px;
+            color: #333;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header>✨ Plan Financiero de Mejora</header>
+
+<!-- Ondas decorativas -->
+<div class="wave w1"></div>
+<div class="wave w2"></div>
+<div class="wave w3"></div>
+
+<nav>
+    <button onclick="mostrar('inicio')">Inicio</button>
+    <button onclick="mostrar('simulador')">Simulador</button>
+    <button onclick="mostrar('bitacora')">Bitácora</button>
+</nav>
+
+<!-- ------------------ INICIO ------------------ -->
+<div id="inicio" class="pantalla activa">
+    <div class="card">
+        <h2>Bienvenido 👋</h2>
+        <p>Explora este prototipo moderno inspirado en diseños premium.</p>
+        <p>Incluye un simulador de ahorro y una bitácora emocional financiera.</p>
+    </div>
+</div>
+
+<!-- ------------------ SIMULADOR ------------------ -->
+<div id="simulador" class="pantalla">
+    <div class="card">
+        <h2>Simulador de Ahorro 💰</h2>
+
+        <label>Cantidad a ahorrar:</label>
+        <input type="number" id="cantidad" placeholder="Ej: 500">
+
+        <label>Tiempo (meses):</label>
+        <input type="number" id="tiempo" placeholder="Ej: 6">
+
+        <button class="btn-accion" onclick="simular()">Mostrar Simulación</button>
+
+        <p id="resultado" style="font-weight:bold; margin-top:20px;"></p>
+    </div>
+</div>
+
+<!-- ------------------ BITÁCORA ------------------ -->
+<div id="bitacora" class="pantalla">
+    <div class="card">
+        <h2>Bitácora Emocional ✍️</h2>
+
+        <textarea id="textoBitacora" rows="5" placeholder="Escribe tus emociones o reflexiones..."></textarea>
+
+        <button class="btn-accion" onclick="guardarBitacora()">Guardar Reflexión</button>
+
+        <h3>Historial:</h3>
+        <div id="historial"></div>
+    </div>
+</div>
+
+<script>
+    function mostrar(pantalla) {
+        document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+        document.getElementById(pantalla).classList.add('activa');
+    }
+
+    function simular() {
+        let cantidad = document.getElementById("cantidad").value;
+        let tiempo = document.getElementById("tiempo").value;
+
+        if (!cantidad || !tiempo) {
+            document.getElementById("resultado").innerText = "Por favor completa ambos campos.";
+            return;
+        }
+
+        document.getElementById("resultado").innerText =
+            `Si ahorras Q${cantidad} durante ${tiempo} meses, podrás visualizar tu progreso financiero.`;
+    }
+
+    function guardarBitacora() {
+        let texto = document.getElementById("textoBitacora").value;
+        if (texto.trim() === "") return;
+
+        let historial = document.getElementById("historial");
+        let entrada = document.createElement("p");
+        entrada.textContent = texto;
+        historial.appendChild(entrada);
+
+        document.getElementById("textoBitacora").value = "";
+    }
+</script>
+
+</body>
+</html>
