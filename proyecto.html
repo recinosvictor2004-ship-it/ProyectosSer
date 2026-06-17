@@ -89,7 +89,7 @@
             font-size: 32px;
         }
 
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 14px;
             margin-top: 10px;
@@ -145,6 +145,22 @@
             color: #333;
         }
 
+        /* Estilos para ingresos y egresos */
+        td.ingreso {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        td.egreso {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .mov-form label {
+            font-size: 16px;
+            margin-top: 10px;
+            display: block;
+        }
     </style>
 </head>
 
@@ -160,6 +176,7 @@
     <button onclick="mostrar('inicio')">Inicio</button>
     <button onclick="mostrar('simulador')">Simulador</button>
     <button onclick="mostrar('bitacora')">Bitácora</button>
+    <button onclick="mostrar('movimientos')">Movimientos</button>
 </nav>
 
 <div id="inicio" class="pantalla activa">
@@ -196,6 +213,41 @@
 
         <h3>Historial:</h3>
         <div id="historial"></div>
+    </div>
+</div>
+
+<!-- NUEVA SECCIÓN COMPLETA -->
+<div id="movimientos" class="pantalla">
+    <div class="card">
+        <h2>Historial de Ingresos y Egresos 📊</h2>
+
+        <div class="mov-form">
+            <label>Descripción:</label>
+            <input type="text" id="desc">
+
+            <label>Monto:</label>
+            <input type="number" id="monto">
+
+            <label>Tipo:</label>
+            <select id="tipo">
+                <option value="Ingreso">Ingreso</option>
+                <option value="Egreso">Egreso</option>
+            </select>
+
+            <button class="btn-accion" onclick="agregarMovimiento()">Agregar Movimiento</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Tipo</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-movimientos"></tbody>
+        </table>
     </div>
 </div>
 
@@ -242,6 +294,31 @@
         historial.appendChild(entrada);
 
         document.getElementById("textoBitacora").value = "";
+    }
+
+    function agregarMovimiento() {
+        let desc = document.getElementById("desc").value;
+        let monto = document.getElementById("monto").value;
+        let tipo = document.getElementById("tipo").value;
+
+        if (desc.trim() === "" || monto.trim() === "") return;
+
+        let fecha = new Date().toLocaleDateString("es-GT");
+
+        let tabla = document.getElementById("tabla-movimientos");
+
+        let fila = document.createElement("tr");
+        fila.innerHTML = `
+            <td>${fecha}</td>
+            <td>${desc}</td>
+            <td class="${tipo === 'Ingreso' ? 'ingreso' : 'egreso'}">${tipo}</td>
+            <td class="${tipo === 'Ingreso' ? 'ingreso' : 'egreso'}">Q${monto}</td>
+        `;
+
+        tabla.appendChild(fila);
+
+        document.getElementById("desc").value = "";
+        document.getElementById("monto").value = "";
     }
 </script>
 
